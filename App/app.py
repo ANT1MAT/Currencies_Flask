@@ -12,6 +12,7 @@ app.config['JSON_AS_ASCII'] = False
 
 
 #Constants
+url_for_list = 'http://www.cbr.ru/scripts/XML_valFull.asp'
 url = 'http://www.cbr.ru/scripts/XML_daily.asp'
 
 
@@ -36,18 +37,12 @@ def validate_date(date):
 
 @app.route("/list_of_currencies", methods=['get'])
 def list_of_currencies():
-    if request.args.get('value') != None:
-        date = request.args.get('value')
-        validate_date(date)
-        date = datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%d/%m/%Y")
-        response = requests.get(url, params={'date_req': date})
+        response = requests.get(url_for_list)
         tree = ET.fromstring(response.text)
         ans = {}
         for child in tree:
-            ans[child.find('CharCode').text] = child.find('Name').text
+            ans[child.find('ISO_Char_Code').text] = child.find('Name').text
         return jsonify(ans)
-    else:
-        return ValueError('Data not transmitted')
 
 
 @app.route("/changes_by_dates", methods=['get'])
