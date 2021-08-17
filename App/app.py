@@ -19,9 +19,7 @@ url = 'http://www.cbr.ru/scripts/XML_daily.asp'
 def find_currency_value(date, currency):
     response = requests.get(url, params={'date_req': date})
     tree = ET.fromstring(response.text)
-    print(date)
     for child in tree:
-        print(child.find('CharCode').text)
         if child.find('CharCode').text == currency:
             return float(child.find('Value').text.replace(',', '.'))
     return 'Not Data'
@@ -32,7 +30,7 @@ def validate_date(date):
         datetime.datetime.strptime(date, '%Y-%m-%d')
     except ValueError:
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")
-        return abort(412)
+
 
 
 @app.route("/list_of_currencies", methods=['get'])
@@ -66,8 +64,8 @@ def changes_by_dates():
                    'Difference': 'Can\'t calculated'}
         return jsonify(ans)
     else:
-        return ValueError('Data not transmitted')
+        raise ValueError('Data not transmitted')
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
