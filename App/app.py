@@ -54,13 +54,13 @@ def changes_by_dates():
         date_to = datetime.datetime.strptime(date_to, "%Y-%m-%d").strftime("%d/%m/%Y")
         try:
             diff = find_currency_value(date_from, currency) - find_currency_value(date_to, currency)
-            ans = {'Currency_value_from': find_currency_value(date_from, currency),
-                    'Currency_value_to': find_currency_value(date_to, currency),
-                    'Difference': diff}
+            ans = {'currency_value_from': find_currency_value(date_from, currency),
+                    'currency_value_to': find_currency_value(date_to, currency),
+                    'difference': diff}
         except:
-            ans = {'Currency_value_from': find_currency_value(date_from, currency),
-                   'Currency_value_to': find_currency_value(date_to, currency),
-                   'Difference': 'Can\'t calculated'}
+            ans = {'currency_value_from': find_currency_value(date_from, currency),
+                   'currency_value_to': find_currency_value(date_to, currency),
+                   'difference': 'Can\'t calculated'}
         return jsonify(ans)
     else:
         raise ValueError('Data not transmitted')
