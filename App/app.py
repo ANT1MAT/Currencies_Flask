@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, make_response
 import datetime
 import requests
 import xml.etree.ElementTree as ET
@@ -25,13 +25,6 @@ def find_currency_value(date, currency):
     return 'Not Data'
 
 
-def validate_date(date):
-    try:
-        datetime.datetime.strptime(date, '%Y-%m-%d')
-    except ValueError:
-        raise ValueError("Incorrect data format, should be YYYY-MM-DD")
-
-
 @app.route("/list_of_currencies", methods=['get'])
 def list_of_currencies():
     response = requests.get(URL_FOR_LIST)
@@ -44,11 +37,14 @@ def list_of_currencies():
 
 @app.route("/changes_by_dates", methods=['get'])
 def changes_by_dates():
-    if request.args.get('date_from') and request.args.get('date_to') and request.args.get('currency') != None:
+    if (request.args.get('date_from') and request.args.get('date_to') and request.args.get('currency')) != None:
         date_from = request.args.get('date_from')
         date_to = request.args.get('date_to')
-        validate_date(date_from)
-        validate_date(date_to)
+        try:
+            datetime.datetime.strptime(date_from, '%Y-%m-%d')
+            datetime.datetime.strptime(date_to, '%Y-%m-%d')
+        except ValueError:
+            return make_response("Incorrect date format, should be YYYY-MM-DD", 400)
         currency = request.args.get('currency')
         date_from = datetime.datetime.strptime(date_from, "%Y-%m-%d").strftime("%d/%m/%Y")
         date_to = datetime.datetime.strptime(date_to, "%Y-%m-%d").strftime("%d/%m/%Y")
@@ -63,7 +59,7 @@ def changes_by_dates():
                    'difference': 'Can\'t calculated'}
         return jsonify(ans)
     else:
-        raise ValueError('Data not transmitted')
+        return make_response('Incorrect data', 400)
 
 
 if __name__ == "__main__":
