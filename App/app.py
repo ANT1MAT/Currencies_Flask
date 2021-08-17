@@ -7,17 +7,17 @@ import xml.etree.ElementTree as ET
 app = Flask(__name__)
 
 
-#Configurate
+# Configurate
 app.config['JSON_AS_ASCII'] = False
 
 
-#Constants
-url_for_list = 'http://www.cbr.ru/scripts/XML_valFull.asp'
-url = 'http://www.cbr.ru/scripts/XML_daily.asp'
+# Constants
+URL_FOR_LIST = 'http://www.cbr.ru/scripts/XML_valFull.asp'
+URL = 'http://www.cbr.ru/scripts/XML_daily.asp'
 
 
 def find_currency_value(date, currency):
-    response = requests.get(url, params={'date_req': date})
+    response = requests.get(URL, params={'date_req': date})
     tree = ET.fromstring(response.text)
     for child in tree:
         if child.find('CharCode').text == currency:
@@ -32,15 +32,15 @@ def validate_date(date):
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")
 
 
-
 @app.route("/list_of_currencies", methods=['get'])
 def list_of_currencies():
-        response = requests.get(url_for_list)
-        tree = ET.fromstring(response.text)
-        ans = {}
-        for child in tree:
-            ans[child.find('ISO_Char_Code').text] = child.find('Name').text
-        return jsonify(ans)
+    service = app
+    response = requests.get(URL_FOR_LIST)
+    tree = ET.fromstring(response.text)
+    ans = {}
+    for child in tree:
+        ans[child.find('ISO_Char_Code').text] = child.find('Name').text
+    return jsonify(ans)
 
 
 @app.route("/changes_by_dates", methods=['get'])
