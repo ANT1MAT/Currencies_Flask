@@ -34,7 +34,6 @@ def validate_date(date):
 
 @app.route("/list_of_currencies", methods=['get'])
 def list_of_currencies():
-    service = app
     response = requests.get(URL_FOR_LIST)
     tree = ET.fromstring(response.text)
     ans = {}
