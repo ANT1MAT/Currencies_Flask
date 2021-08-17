@@ -14,7 +14,9 @@
 
 А)Вызов метода, передающего информацию о списке доступных валют:
 http://127.0.0.1:5000/list_of_currencies
+
 Пример ответа:
+
 {
     "AMD": "Армянский драм",
     "AON": "Ангольская новая кванза",
@@ -81,9 +83,13 @@ http://127.0.0.1:5000/list_of_currencies
 http://127.0.0.1:5000/changes_by_dates?date_from=2007-10-03&date_to=2015-10-04&currency=USD
 
 date_from - первая дата
+
 date_to - вторая дата
+
 currency - символьный код валюты
+
 Пример ответа:
+
 {
     "Currency_value_from": 24.9093,
     "Currency_value_to": 65.9414,
