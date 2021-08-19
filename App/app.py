@@ -94,8 +94,7 @@ def changes_by_dates():
                 'currency_value_to': second_date,
                 'difference': diff}
         return jsonify(ans)
-    else:
-        return make_response('Incorrect data', 400)
+    return make_response('Incorrect data', 400)
 
 
 if __name__ == "__main__":
